@@ -1,26 +1,40 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <the-login v-if="!token" />
+  <the-spotify> </the-spotify>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import TheLogin from "./components/TheLogin.vue";
+import TheSpotify from "./components/TheSpotify.vue";
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+  name: "App",
+  components: { TheLogin, TheSpotify },
+  data() {
+    return {
+      token: null,
+    };
+  },
+  mounted() {
+    const hash = window.location.hash;
+    console.log(hash);
+    if (hash) {
+      this.token = hash.substring(1).split("&")[0].split("=")[1];
+      console.log(this.token);
+    }
+    this.setToken();
+  },
+  methods: {
+    setToken() {
+      this.$store.commit("setToken", { text: this.token });
+    },
+  },
+};
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 </style>
